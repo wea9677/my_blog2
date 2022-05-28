@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>나만의 블로그</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <style>
+        .box_section{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .box{
+            margin-top:3%;
+            min-width: 500px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;}
+        .input{margin-bottom: 10px;}
+    </style>
+
+  </head>
+  <body>
+    <section class="hero is-medium is-link">
+    <a href="/">
+            <div class="hero-body">
+          <p class="title">
+            나만의 블로그
+          </p>
+          <p class="subtitle">
+            항해 99 안전한 항해를 위하여
+          </p>
+        </div>
+    </a>
+      </section>
+      <section class = "box_section">
+                    <div class="box">
+                        <input class="input is-info" type="text" placeholder="제목을 입력하세요">
+                        <input class="input is-info" type="text" placeholder="작성자">
+                        <textarea class="textarea is-info" placeholder="게시물 작성하기"></textarea>
+                    </div>
+      </section>
+  </body>
+</html>
