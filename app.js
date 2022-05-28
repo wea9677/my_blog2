@@ -6,9 +6,10 @@ const Article = require("./models/article");
 const Comment = require("./models/comment")
 const Joi = require('joi');
 // const connect = require("./schemas");
+const router = express.Router();
 const app = express();
 const port = 8080;
-const router = express.Router();
+
 
 // 로컬에서 테스트 중인 경우
 mongoose.connect('mongodb://0.0.0.0/my_blog2', {
@@ -37,6 +38,7 @@ const requestMiddleware = (req, res, next) => {
     console.log("Request URL:", req.originalUrl, " - ", new Date());
     next();
 };
+
 // 데이터 파싱 미들웨어
 app.use(express.json());
 
@@ -49,15 +51,74 @@ app.get("/", (req, res) =>{
     // res.sendFile(__dirname + "/index.html")
 });
 
-// app.get("/article", (req, res) =>{
-//     res.sendFile(__dirname + "/article.html")
+//  app.get("/article", (req, res) =>{
+// //     res.sendFile(__dirname + "/article.html")
+//     res.send("테스트입니다.")
+//  });
+
+// // 전체 글 불러오기
+//  router.get('/articles', async (req, res) => {
+//     // [{ article의 내용. _id: ..., title: ..., content: ... }, { }, { }]
+//     const articles = await Article.find().sort({ createdAt: 'desc' }).exec();
+//     // authorId만 추출. ['authorId1', 'authorId2', 'authorId3', ..]
+//     const authorIds = articles.map((author) => author.authorId);
+//     // $in : 비교 연산자. 주어진 배열(authorIds) 안에 속하는 값
+//     const authorInfoById = await User.find({
+//         _id: { $in: authorIds },
+//     })
+//         .exec()
+//         .then((author) => author.reduce((prev, a) => ({...prev,[a.authorId]: a,}),{}));
+//     // console.log(authorInfoById); // { authorId1: { _id: .. , authorName: .. , password: .. ,}, authorId2: {}, .. }
+//     res.send({
+//         articles: articles.map((a) => ({
+//             articleId: a.articleId,
+//             title: a.title,
+//             content: a.content,
+//             createdAt: a.createdAt,
+//             authorInfo: authorInfoById[a.authorId],
+//         })),
+//     });
 // });
+
+
 
 //글 쓰기 파트
 
-// router.post("/article/write", async (req, res) => {
- 
-// });
+app.post("/article/write", async (req, res) => {
+    const { authorId, articlePw, title, content } = req.body;
+    console.log(req.body);
+    const createdArticle = await Article.create({authorId, articlePw, title, content,});
+    res.json({ article: createdArticle });
+    // res.status(201).json({ result: 'success', msg: '글이 등록되었습니다.' });
+    
+
+});
+
+app.get("/article", async (req, res) => {
+
+    const articles = await Article.find().sort({ createdAt: 'desc' }).exec();
+
+    res.json({
+        articles,
+    });
+
+    // const authorIds = articles.map((author) => author.authorId);
+
+    // const authorInfoById = await User.find({_id: { $in: authorIds },}) .exec().then((author) =>author.reduce((prev, a) => ({...prev,[a.authorId]: a,}),{}));
+
+    // res.send({
+    //     articles: articles.map((a) => ({
+    //         articleId: a.articleId,
+    //         title: a.title,
+    //         content: a.content,
+    //         createdAt: a.createdAt,
+    //         authorInfo: authorInfoById[a.authorId],
+    //     })),
+    // });
+
+
+});
+
 
 
 
@@ -83,17 +144,17 @@ const postUserSchema = Joi.object({
 
 
 
-router.post("/users", async (req, res) =>{
+app.post("/users", async (req, res) =>{
 
-    const {authorName, pw, confirmPassword} = await postUserSchema.validateAsync(req.body);
+    const {authorName, pw, confirmPassword} = req.body;
 
-    if (pw.includes(authorName)) {
-        res.status(400).send({
-            errorMessage:
-                '비밀번호에 사용자의 아이디는 포함할 수 없습니다.',
-        });
-        return; // 이 코드 이하의 코드를 실행하지 않고 탈출
-    }
+    // if (pw.includes(authorName)) {
+    //     res.status(400).send({
+    //         errorMessage:
+    //             '비밀번호에 사용자의 아이디는 포함할 수 없습니다.',
+    //     });
+    //     return; // 이 코드 이하의 코드를 실행하지 않고 탈출
+    // }
 
     if (pw !== confirmPassword) {
         // 비밀번호, 비밀번호 확인 일치 여부 확인
@@ -116,11 +177,10 @@ router.post("/users", async (req, res) =>{
     const user = new User({ authorName, pw });
     await user.save();
 
-    res.status(201).json({users : user })
+    return res.status(201).json({
+        success: true
+    })
 
-   
-  
-   
 });
 
 
