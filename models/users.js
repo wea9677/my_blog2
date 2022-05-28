@@ -1,13 +1,12 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-    email : String,
-    nickname: String,
-    password: String,
+    authorName: String,
+    pw: String,
 
 });
 
-UserSchema.virtual("userId").get(function () {
+UserSchema.virtual("authorId").get(function () {
     return this._id.toHexString();
 });
 UserSchema.set("toJSON" , {
