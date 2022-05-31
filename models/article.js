@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const BlogSchema = mongoose.Schema(
+const articleSchema = mongoose.Schema(
     {
         title: String,
         content: String,
@@ -10,12 +10,12 @@ const BlogSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-BlogSchema.virtual('articleId').get(function () {
+articleSchema.virtual('articleId').get(function () {
     return this._id.toHexString();
 });
 
-BlogSchema.set('toJSON', {
+articleSchema.set('toJSON', {
     virtuals: true,
 });
 
-module.exports = mongoose.model('Article', BlogSchema);
+module.exports = mongoose.model('Article', articleSchema);

@@ -210,14 +210,16 @@
             console.log("ready");
             // alert(user["authorId"]);
             // 현재 user의 authorId랑 $('#authorId').val() 값 비교해서 true false 판별
-            
+            $("#signOutFunction").show();
             // 로그인 상태일때
             if(user !== undefined){ 
+                
                 let currentAuthorId = user["authorId"];
                 let articleAuthorId = $('#authorId').val();
                 // 작성자가 아닌 경우 글 [수정하기] 버튼 숨기기
                 if(currentAuthorId !== articleAuthorId){ 
                     $('#modifyButton').hide();
+                    
                 }
                 $('#currentUserId').attr("value",currentAuthorId); // 글 부분 변경. 초기 input value가 비어있음(hidden 상태)
                 let commentsHTML = $('.commentAuthorId').get(); // 코멘트 권한 변경. class가 commentAuthorId인 값을 모두 가져옴 (모든 댓글)

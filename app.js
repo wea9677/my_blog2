@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -27,8 +27,8 @@ mongoose.connect('mongodb://0.0.0.0/my_blog2', {
 //         console.error(err);
 //     });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
 
 const app = express();
 const router = express.Router();
