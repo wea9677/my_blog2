@@ -10,7 +10,7 @@ const articleSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-articleSchema.virtual('articleId').get(function () {
+articleSchema.virtual('articleId').get(function () { 
     return this._id.toHexString();
 });
 

@@ -11,11 +11,17 @@ const port = 8080;
 
 
 // 로컬에서 테스트 중인 경우
-mongoose.connect('mongodb://0.0.0.0/my_blog2', {
+// mongoose.connect('mongodb://0.0.0.0/my_blog2', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
+
+
+mongoose.connect('mongodb+srv://wea9677:tmxkdlfl@cluster0.xmzro.mongodb.net/blog_2_database?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    ignoreUndefined: true,
 });
-
 // Ubuntu EC2에서 테스트 중인 경우
 // mongoose
 //     .connect(process.env.AWS_MONGO_DB, {
@@ -27,8 +33,8 @@ mongoose.connect('mongodb://0.0.0.0/my_blog2', {
 //         console.error(err);
 //     });
 
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
 
 const app = express();
 const router = express.Router();
@@ -400,14 +406,16 @@ router.post('/auth', async (req, res) => {
      * [Object: null prototpye] { user: { _id: new ObjectId("61f..78"), authorName: 'shjin', password: 'mypassword', createdAt: 2022-02-01T10:28:53.882Z, ...  __v: 0 }}
      */
     const { user } = res.locals; // user object
-    // console.log(res.locals);
-    // console.log(user);
+    console.log(res.locals);
+    
     res.send({
+        
         user: {
             authorId: user.authorId,
             authorName: user.authorName,
         },
     });
+    console.log(user);
 });
 
 
