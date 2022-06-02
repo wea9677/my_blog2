@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
         return;
     }
     try {
-        const { authorId } = jwt.verify(tokenValue, 'MY-SECRET-KEY'); // 유효한 토큰인지 확인. verify
+        const { authorId } = jwt.verify(tokenValue, process.env.JWT_SECRET); // 유효한 토큰인지 확인. verify
         // const user = User.findById(userId).exec(); // 이렇게 해서 찾아왔던 user를, 아래 구문과 같이 변경
         /** 
          * user 내용 예시

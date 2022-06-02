@@ -1,6 +1,7 @@
 // require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require("dotenv");
 const jwt = require('jsonwebtoken');
 const User = require('./models/user');
 const Article = require('./models/article');
@@ -35,7 +36,7 @@ mongoose.connect('mongodb+srv://wea9677:tmxkdlfl@cluster0.xmzro.mongodb.net/blog
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-
+dotenv.config();
 const app = express();
 const router = express.Router();
 // // 데이터 파싱 미들웨어
@@ -177,7 +178,10 @@ router.delete(
     async (req, res) => {
         const { articlePassword, articleId, commentId } = req.body;
         const existsArticle = await Article.findById(articleId);
+        const comments = await Comment.find({ articleId: articleId }).exec();
+       
 
+        
         if (existsArticle) {
             // existsArticle 이 존재하는 경우 = 쿼리 결과가 있는 경우
             if (existsArticle.articlePassword !== articlePassword) {
@@ -187,7 +191,7 @@ router.delete(
                     msg: '비밀번호가 일치하지 않네요.',
                 }); // 이거 대체 뭘로 줌? response? error? xhr?
             } else {
-                await Article.findByIdAndDelete(articleId, commentId); // articleId 일치하는 것으로 삭제
+                await Article.findByIdAndDelete(articleId); // articleId 일치하는 것으로 삭제
                 res.status(200).json({
                     result: 'success',
                     msg: '글이 삭제되었습니다.',
@@ -378,7 +382,7 @@ router.post('/auth', async (req, res) => {
         // console.log(user.authorName);
         // console.log(user.password);
         // const token = jwt.sign({ userId: user.userId }, "MY-SECRET-KEY"); // 토큰을 서버쪽에서 sign 하여 생성
-        const token = jwt.sign({ authorId: user.authorId }, 'MY-SECRET-KEY'); // 토큰을 서버쪽에서 sign 하여 생성
+        const token = jwt.sign({ authorId: user.authorId }, process.env.JWT_SECRET); // 토큰을 서버쪽에서 sign 하여 생성
         // console.log(token);
         // console.log(typeof(token));
         res.send({
