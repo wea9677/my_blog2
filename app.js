@@ -175,7 +175,7 @@ router.delete(
     '/articles/:articleId/modify',
     authMiddleware,
     async (req, res) => {
-        const { articlePassword, articleId } = req.body;
+        const { articlePassword, articleId, commentId } = req.body;
         const existsArticle = await Article.findById(articleId);
 
         if (existsArticle) {
@@ -187,7 +187,7 @@ router.delete(
                     msg: '비밀번호가 일치하지 않네요.',
                 }); // 이거 대체 뭘로 줌? response? error? xhr?
             } else {
-                await Article.findByIdAndDelete(articleId); // articleId 일치하는 것으로 삭제
+                await Article.findByIdAndDelete(articleId, commentId); // articleId 일치하는 것으로 삭제
                 res.status(200).json({
                     result: 'success',
                     msg: '글이 삭제되었습니다.',
